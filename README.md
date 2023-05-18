@@ -113,6 +113,58 @@ docker run \
   typesense/docsearch-scraper:0.6.0
 ```
 
+- Add search widget to Docusaurus site
+This requires adding a package, and editing the docusaurus.config.js file.
+
+```bash
+yarn add docusaurus-theme-search-typesense@next
+```
+
+Docusaurus config:
+
+I add the `themes` line just before `themeConfig`.
+
+I added the `typesense` theme config as the first entry in `themeConfig`.  You can see it below, it ends just before the navbar configuration.
+```js
+...
+        theme: {
+          customCss: require.resolve('./src/css/custom.css'),
+        },
+      }),
+    ],
+  ],
+
+  themes: ['docusaurus-theme-search-typesense'],
+
+  themeConfig:
+    /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
+    ({
+      typesense: {
+      typesenseCollectionName: 'docusaurus-2', // Replace with your own doc site's name. Should match the collection name in the scraper settings.
+
+      typesenseServerConfig: {
+        nodes: [
+          {
+            host: 'localhost',
+            port: 8108,
+            protocol: 'http',
+          },
+        ],
+        apiKey: 'xyz',
+      },
+
+      // Optional: Typesense search parameters: https://typesense.org/docs/0.21.0/api/documents.md#search-parameters
+      typesenseSearchParameters: {},
+
+      // Optional
+      contextualSearch: true,
+    },
+
+      navbar: {
+        title: 'My Site',
+        ...
+```
+
 
 This is a fork of Algolia's awesome [DocSearch Scraper](https://github.com/algolia/docsearch-scraper), customized to index data in [Typesense](https://typesense.org). 
 
