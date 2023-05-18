@@ -2,6 +2,22 @@
 
 ## Dan's notes:
 
+- Docusaurus site
+
+npx seems to not be working today, so I copied in an old Docusaurus demo
+so I can work.  It is in the dir `my-website`.  
+
+Build the Docusaurus site:
+```bash
+cd my-website
+yarn build
+```
+
+Host it on port 3000:
+```bash
+yarn serve
+```
+
 - compose file for typesense server
 
 ```yaml
