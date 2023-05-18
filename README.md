@@ -7,6 +7,8 @@
 npx seems to not be working today, so I copied in an old Docusaurus demo
 so I can work.  It is in the dir `my-website`.  
 
+I had to edit the `docusaurus.config.js` file to set the URL to 'http://host.docker.internal:3000' as this is used when generating the sitemap that the crawler uses.
+
 Build the Docusaurus site:
 ```bash
 cd my-website
@@ -16,6 +18,57 @@ yarn build
 Host it on port 3000:
 ```bash
 yarn serve
+```
+
+- Crawler config
+The crawler docs provide a link to a Docusaurus 2.x crawler config and one line to update.
+Since I am running Docusaurus on localhost and the crawler in a container I had to specify
+the hostname as `host.docker.internal` instead of localhost.  Here is the crawler config:
+
+```json
+{
+  "index_name": "docusaurus-2",
+  "sitemap_urls": [
+    "http://host.docker.internal:3000/sitemap.xml"
+  ],
+  "selectors": {
+    "lvl0": {
+      "selector": "(//ul[contains(@class,'menu__list')]//a[contains(@class, 'menu__link menu__link--sublist menu__link--active')]/text() | //nav[contains(@class, 'navbar')]//a[contains(@class, 'navbar__link--active')]/text())[last()]",
+      "type": "xpath",
+      "global": true,
+      "default_value": "Documentation"
+    },
+    "lvl1": "article h1, header h1",
+    "lvl2": "article h2",
+    "lvl3": "article h3",
+    "lvl4": "article h4",
+    "lvl5": "article h5, article td:first-child",
+    "lvl6": "article h6",
+    "text": "article p, article li, article td:last-child"
+  },
+  "strip_chars": " .,;:#",
+  "custom_settings": {
+    "separatorsToIndex": "_",
+    "attributesForFaceting": [
+      "language",
+      "version",
+      "type",
+      "docusaurus_tag"
+    ],
+    "attributesToRetrieve": [
+      "hierarchy",
+      "content",
+      "anchor",
+      "url",
+      "url_without_anchor",
+      "type"
+    ]
+  },
+  "conversation_id": [
+    "833762294"
+  ],
+  "nb_hits": 46250
+}
 ```
 
 - compose file for typesense server

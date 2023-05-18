@@ -1,14 +1,7 @@
 {
   "index_name": "docusaurus-2",
-  "start_urls": [
-    "https://docusaurus.io/"
-  ],
   "sitemap_urls": [
     "http://host.docker.internal:3000/sitemap.xml"
-  ],
-  "sitemap_alternate_links": true,
-  "stop_urls": [
-    "/tests"
   ],
   "selectors": {
     "lvl0": {
