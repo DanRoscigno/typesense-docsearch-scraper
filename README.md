@@ -1,5 +1,50 @@
 # Typesense DocSearch scraper
 
+## Dan's notes:
+
+- compose file for typesense server
+
+```yaml
+version: '3.4'
+services:
+  typesense:
+    image: typesense/typesense:0.24.0
+    restart: on-failure
+    ports:
+      - "8108:8108"
+    volumes:
+      - ./typesense-data:/data
+    command: '--data-dir /data --api-key=xyz --enable-cors'
+```
+
+- Run typesense server
+
+```bash
+docker compose up -d
+```
+
+- env file that crawler will use
+name is `.env`.  Since both typesense server and crawler are running in Docker containers
+the TYPESENSE_HOST is `host.docker.internal`.  I should change this to be two services
+in the docker compose file.
+
+```
+TYPESENSE_API_KEY=xyz
+TYPESENSE_HOST=host.docker.internal
+TYPESENSE_PORT=8108
+TYPESENSE_PROTOCOL=http
+```
+
+- Run a crawl
+```bash
+docker run \
+  -it --env-file=./.env \
+  -e "CONFIG=$(cat config.json | jq -r tostring)" \
+  --add-host=host.docker.internal:host-gateway  \
+  typesense/docsearch-scraper:0.6.0
+```
+
+
 This is a fork of Algolia's awesome [DocSearch Scraper](https://github.com/algolia/docsearch-scraper), customized to index data in [Typesense](https://typesense.org). 
 
 You'd typically setup this scraper to run on your documentation site, and then use [typesense-docsearch.js](https://github.com/typesense/typesense-docsearch.js) to add a search bar to your site. 

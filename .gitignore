@@ -1,12 +1,12 @@
 .DS_Store
 crawling_data
+typesense-data/
 node_modules
 checker/node_modules
 .cache
 src/__pycache__/
 src/strategies/__pycache__/
 *.pyc
-.env
 .env.production
 update.sh
 
