@@ -4,7 +4,6 @@ DocSearch scraper main entry point
 import os
 import json
 import requests
-from requests_iap import IAPAuth
 
 from scrapy.crawler import CrawlerProcess
 
@@ -15,7 +14,6 @@ from .strategies.default_strategy import DefaultStrategy
 from .custom_downloader_middleware import CustomDownloaderMiddleware
 from .custom_dupefilter import CustomDupeFilter
 from .config.browser_handler import BrowserHandler
-from .strategies.algolia_settings import AlgoliaSettings
 
 try:
     # disable boto (S3 download)
@@ -51,22 +49,6 @@ def run_config(config):
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
         "Accept-Language": "en",
     }  # Defaults for scrapy https://docs.scrapy.org/en/latest/topics/settings.html#default-request-headers
-
-    if os.getenv("CF_ACCESS_CLIENT_ID") and os.getenv("CF_ACCESS_CLIENT_SECRET"):
-        headers.update(
-            {
-                "CF-Access-Client-Id": os.getenv("CF_ACCESS_CLIENT_ID"),
-                "CF-Access-Client-Secret": os.getenv("CF_ACCESS_CLIENT_SECRET"),
-            }
-        )
-    elif os.getenv("IAP_AUTH_CLIENT_ID") and os.getenv("IAP_AUTH_SERVICE_ACCOUNT_JSON"):
-        iap_token = IAPAuth(
-            client_id=os.getenv("IAP_AUTH_CLIENT_ID"),
-            service_account_secret_dict=json.loads(
-                os.getenv("IAP_AUTH_SERVICE_ACCOUNT_JSON")
-            ),
-        )(requests.Request()).headers["Authorization"]
-        headers.update({"Authorization": iap_token})
 
     DEFAULT_REQUEST_HEADERS = headers
 
