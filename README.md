@@ -183,3 +183,25 @@ So, to build a new container the command is:
 # Run this from the root of the repo
 ./docsearch docker:build
 ```
+
+## Updating Pipfile.lock
+The ./docsearch docker:build command copies in the Pipfile.lock, so updating the Pipfile 
+and then building is not sufficient.  To generate a new lock file run the container with
+an overridden entrypoint:
+```bash
+docker run --entrypoint /bin/bash \
+  -it --env-file=./.env 
+  -e "CONFIG=$(cat config.json | jq -r tostring)" 
+  --add-host=host.docker.internal:host-gateway  
+  docker.io/typesense/docsearch-scraper
+```
+
+And then in the container run:
+```bash
+pipenv lock
+```
+
+Copy out the new Pipfile.lock file:
+```bash
+docker cp <container name>:/home/seleuser/Pipfile.lock .
+```
