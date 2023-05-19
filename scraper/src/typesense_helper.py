@@ -87,7 +87,7 @@ class TypesenseHelper:
         color = "96" if from_sitemap else "94"
 
         print(
-            '\033[{}m> DocSearch: \033[0m{}\033[93m {} records\033[0m)'.format(
+            '\033[{}m> Crawly: \033[0m{}\033[93m {} records\033[0m)'.format(
                 color, url, record_count))
 
     def commit_tmp_collection(self):
