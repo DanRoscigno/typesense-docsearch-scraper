@@ -1,5 +1,28 @@
 # Typesense DocSearch scraper
 
+## Start things up
+
+1. Start Docusaurus
+```bash
+cd my-website
+yarn build
+yarn serve
+```
+
+1. Start Typesense server
+```bash
+docker compose up -d
+```
+
+1. Start crawler
+```bash
+docker run \
+    -it --env-file=./.env \
+    -e "CONFIG=$(cat config.json | jq -r tostring)" \
+    --add-host=host.docker.internal:host-gateway  \
+    docker.io/typesense/docsearch-scraper
+```
+
 ## Dan's notes:
 
 - Docusaurus site
