@@ -11,7 +11,7 @@ class AbstractBuildDocker(AbstractCommand):
             tag = AbstractBuildDocker.get_local_tag().decode()
             tags.append(image + ":" + tag)
 
-        cmd = ["docker", "build"] + [param for tag in tags for param in
+        cmd = ["docker", "build", "--network=host"] + [param for tag in tags for param in
                                      ['-t', tag]] + ["-f", file, "."]
         return AbstractCommand.exec_shell_command(cmd)
 
