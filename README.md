@@ -110,6 +110,13 @@ docker run \
   -it --env-file=./.env \
   -e "CONFIG=$(cat config.json | jq -r tostring)" \
   --add-host=host.docker.internal:host-gateway  \
+  docker.io/typesense/docsearch-scraper
+```  
+
+Note: The above docker run command uses a local build of the image.  If you
+want to run the typesense build from Docker Hub then replace the last line
+of the above docker run command with:
+```bash
   typesense/docsearch-scraper:0.6.0
 ```
 
@@ -165,4 +172,14 @@ I added the `typesense` theme config as the first entry in `themeConfig`.  You c
         ...
 ```
 
+## Editing the code
+As I am planning to customize the Docker container (update to latest Scrapy, etc.)
+I had to update the Dockerfile as some of the packages are obsolete
+(for example, the Google Chrome used by Selenium--I think, I don't
+actually use Selenium myself).
 
+So, to build a new container the command is:
+```bash
+# Run this from the root of the repo
+./docsearch docker:build
+```

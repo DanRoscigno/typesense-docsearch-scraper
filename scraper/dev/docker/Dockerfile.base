@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 ubuntu:22.04
+FROM --platform=linux/amd64 ubuntu
 LABEL maintainer="contact@typesense.org"
 
 # Install selenium
@@ -15,13 +15,16 @@ WORKDIR /home/seleuser
 RUN apt-get update -y && apt-get install -yq \
     software-properties-common\
     python3.10 
-RUN add-apt-repository -y ppa:openjdk-r/ppa
+RUN apt-get update -y && add-apt-repository -y ppa:openjdk-r/ppa
+RUN apt-get update -y && apt-get install -y \
+    curl
 RUN apt-get update -y && apt-get install -yq \
-    curl \
-    wget \
-    sudo \
-    gnupg \
-    && curl -sL https://deb.nodesource.com/setup_18.x | sudo bash -
+    wget
+RUN apt-get update -y && apt-get install -yq \
+    sudo
+RUN apt-get update -y && apt-get install -yq \
+    gnupg
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
 RUN apt-get update -y && apt-get install -y \
     nodejs
 RUN apt-get update -y && apt-get install -yq \
@@ -34,8 +37,9 @@ RUN apt-get update -y && apt-get install -yq \
 # https://www.ubuntuupdates.org/package/google_chrome/stable/main/base/google-chrome-stable for references around the latest versions
 RUN curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add
 RUN echo "deb [arch=amd64]  https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list
-RUN apt-get update -y && apt-get install -yq \
-  google-chrome-stable=110.0.5481.100-1 \
+RUN apt-get update -y && apt-get install -y \
+  google-chrome-stable=113.0.5672.126-1
+RUN apt-get update -y && apt-get install -y \
   unzip
 RUN wget -q https://chromedriver.storage.googleapis.com/110.0.5481.77/chromedriver_linux64.zip
 RUN unzip chromedriver_linux64.zip
